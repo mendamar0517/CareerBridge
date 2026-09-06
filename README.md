@@ -8,9 +8,9 @@
 
 | Нэр         | Scrum үүрэг   |
 | ----------- | ------------- |
-| [Чиний нэр] | Scrum Master  |
-| Чингэрэл    | Product Owner |
-| Энхжин      | Developer     |
+| О.Мэнд-Амар | Scrum Master  |
+| С.Чингэрэл  | Product Owner |
+| Б.Энхжин    | Developer     |
 
 ## Development Team
 
