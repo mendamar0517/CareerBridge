@@ -1,0 +1,13 @@
+{
+  "name": "careerbridge",
+  "version": "0.1.0",
+  "description": "CareerBridge — залуучуудын ажилд орох бэлтгэлийг дэмжих веб платформ (Sprint 1 үндсэн логик)",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest --verbose"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
