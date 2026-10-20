@@ -1,5 +1,5 @@
 // US-02 – Төгсөлтийн мэдээлэл: сүүлийн 2 жилийн дотор төгссөн эсэх
-const MAX_YEARS_SINCE_GRADUATION = 2;
+const MAX_YEARS_SINCE_GRADUATION = 3;
 
 function isEligibleGraduate(graduationDate, now = new Date()) {
   const grad = new Date(graduationDate);
