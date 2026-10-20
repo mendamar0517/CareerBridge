@@ -7,8 +7,8 @@ describe('US-02 – Төгсөлтийн мэдээлэл (2 жилийн шал
     expect(isEligibleGraduate('2025-06-15', now)).toBe(true);
   });
 
-  test('3 жилийн өмнө төгссөн бол тэнцэхгүй', () => {
-    expect(isEligibleGraduate('2023-06-15', now)).toBe(false);
+  test('2 жил 4 сарын өмнө төгссөн бол тэнцэхгүй', () => {
+    expect(isEligibleGraduate('2024-06-15', now)).toBe(false);
   });
 
   test('ирээдүйн огноог татгалзана', () => {
