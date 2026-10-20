@@ -62,3 +62,12 @@ commit үүсгэх болон GitHub руу push хийх үйлдлүүдий�
 
 Лабораторийн ажлын төгсгөлд GitHub repository дотор
 README.md файл байрлаж, багийн гишүүдийн хийсэн өөрчлөлтүүд commit history хэсэгт харагдана.
+## CI (Лаборатори 07)
+
+Төсөлд GitHub Actions ашигласан CI pipeline тохируулсан (`.github/workflows/ci.yml`).
+`main` салбар руу push хийх болон Pull Request нээх бүрт дараах алхмууд автоматаар ажиллана:
+
+1. Checkout – кодыг татах
+2. Setup – Node.js 20 орчин тохируулах
+3. Install – `npm ci`
+4. Test – `npm test` (Jest)
