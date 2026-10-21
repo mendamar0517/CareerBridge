@@ -1,0 +1,26 @@
+# CareerBridge — локал хөгжүүлэлтийн орчин
+# Ажиллуулах: docker compose up -d
+services:
+  db:
+    image: postgres:16
+    container_name: careerbridge-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-careerbridge}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-careerbridge}
+      POSTGRES_DB: ${POSTGRES_DB:-careerbridge}
+      TZ: Asia/Ulaanbaatar
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - cb-pgdata:/var/lib/postgresql/data
+      # Volume хоосон үед (анх удаа) db/init/*.sql файлуудыг цагаан толгойн дарааллаар ажиллуулна
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  cb-pgdata:
