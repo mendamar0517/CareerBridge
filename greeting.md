@@ -1,4 +1,4 @@
 # CareerBridge - Greeting
 
-Greeting: Welcome to Chingerel!
-Greeting: Hello, Enkhjin!
+-Greeting: Welcome to Chingerel!
+-Greeting: Hello, Enkhjin!
