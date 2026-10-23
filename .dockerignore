@@ -1,0 +1,17 @@
+# Image-д орох шаардлагагүй файлууд (хэмжээ, нууцлал)
+node_modules
+npm-debug.log
+.git
+.github
+.vscode
+.env
+.env.*
+!.env.example
+.DS_Store
+coverage
+tests
+db
+*.md
+docker-compose*.yml
+Dockerfile
+.dockerignore

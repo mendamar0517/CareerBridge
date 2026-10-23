@@ -1,6 +1,23 @@
 # CareerBridge — локал хөгжүүлэлтийн орчин
-# Ажиллуулах: docker compose up -d
+# Ажиллуулах: docker compose up -d --build
+#   API: http://localhost:3000/health
 services:
+  api:
+    build: .
+    image: careerbridge-api:local
+    container_name: careerbridge-api
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      # Контейнер дотроос DB-д "db" нэрээр хандана (localhost биш)
+      DATABASE_URL: postgresql://${POSTGRES_USER:-careerbridge}:${POSTGRES_PASSWORD:-careerbridge}@db:5432/${POSTGRES_DB:-careerbridge}?schema=public
+    ports:
+      - "${API_PORT:-3000}:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
   db:
     image: postgres:16
     container_name: careerbridge-db

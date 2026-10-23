@@ -71,3 +71,35 @@ README.md файл байрлаж, багийн гишүүдийн хийсэн 
 2. Setup – Node.js 20 орчин тохируулах
 3. Install – `npm ci`
 4. Test – `npm test` (Jest)
+
+## CI/CD (Docker + GitHub Container Registry)
+
+`.github/workflows/ci.yml` нь 2 job-оос бүрдэнэ:
+
+| Job | Хэзээ ажиллах | Алхмууд |
+| --- | --- | --- |
+| `build-and-test` | push, PR → `main` | checkout → Node.js 20 → `npm ci` → `npm test` |
+| `docker` | `build-and-test` амжилттай болсны дараа | image build → `/health` smoke test → **зөвхөн `main` руу push хийхэд** GHCR руу push |
+
+Image: `ghcr.io/mendamar0517/careerbridge:latest` болон `:sha-<commit>`.
+
+### Локалд ажиллуулах
+
+```bash
+npm install
+npm start                          # http://localhost:3000/health
+
+# эсвэл Docker-оор (API + PostgreSQL)
+docker compose up -d --build
+```
+
+### Registry-ээс татаж ажиллуулах
+
+```bash
+docker pull ghcr.io/mendamar0517/careerbridge:latest
+docker run -p 3000:3000 ghcr.io/mendamar0517/careerbridge:latest
+```
+
+> GHCR дээр анх үүссэн package нь **private** байдаг. Нэвтрэлтгүй pull хийх бол
+> GitHub → Packages → careerbridge → Package settings → *Change visibility* → Public болгоно.
+
