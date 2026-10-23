@@ -98,9 +98,39 @@ docker compose up -d --build
 
 ```bash
 docker pull ghcr.io/mendamar0517/careerbridge:latest
-docker run -p 3000:3000 ghcr.io/mendamar0517/careerbridge:latest
+docker run -d --name careerbridge -p 3000:3000 ghcr.io/mendamar0517/careerbridge:latest
+
+# Сервер асах хүртэл хүлээгээд шалгах (асаж амжаагүй үед "Connection reset by peer" гарна)
+until curl -fsS localhost:3000/health; do sleep 1; done
+
+docker rm -f careerbridge          # дууссаны дараа
 ```
 
-> GHCR дээр анх үүссэн package нь **private** байдаг. Нэвтрэлтгүй pull хийх бол
-> GitHub → Packages → careerbridge → Package settings → *Change visibility* → Public болгоно.
+Package нь **public** тул нэвтрэлтгүй pull хийнэ.
+
+### API endpoint-ууд
+
+| Method | Зам | Тайлбар |
+| --- | --- | --- |
+| `GET` | `/health` | Төлөв шалгах (Docker HEALTHCHECK, CI smoke test) |
+| `POST` | `/api/v1/registrations/validate` | US-01 бүртгэлийн өгөгдлийг шалгах: 200 эсвэл 400 + `errors` |
+
+### Pipeline-ийн баталгаажуулалт (2026-10-23)
+
+| Шат | Үр дүн |
+| --- | --- |
+| Build + тест | PR #29, #30 дээр `build-and-test`, `docker` job ногоон (15/15 тест) |
+| Registry руу push | `main` (`64d1d7f`) дээр GHCR руу amd64 + arm64 image push хийгдсэн |
+| Pull хийж ажиллуулах | Apple Silicon Mac дээр `docker pull` → контейнер `Up (healthy)` |
+| Ажиллагаа | `GET /health` → `{"status":"ok","service":"careerbridge-api","version":"0.1.0",…}` |
+
+Илэрсэн асуудал ба засвар:
+
+- **`no matching manifest for linux/arm64/v8`**: image зөвхөн amd64 байсан → QEMU + `platforms: linux/amd64,linux/arm64` нэмэв (PR #30).
+- **`curl: (56) Connection reset by peer`**: `docker run -d`-ийн дараа шууд хандахад Node сервер асаж амжаагүй → дээрх `until curl …` хүлээлтээр шийднэ.
+
+### Дараагийн алхам
+
+- Production (Render) руу байршуулах: GHCR image + deploy hook (`secrets.RENDER_DEPLOY_HOOK`).
+- PostgreSQL (Neon) холболт: `DATABASE_URL` environment variable.
 
