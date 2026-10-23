@@ -4,10 +4,19 @@
   "description": "CareerBridge — залуучуудын ажилд орох бэлтгэлийг дэмжих веб платформ (Sprint 1 үндсэн логик)",
   "main": "src/index.js",
   "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
     "test": "jest --verbose"
   },
   "license": "MIT",
   "devDependencies": {
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "supertest": "^7.3.1"
+  },
+  "dependencies": {
+    "express": "^4.22.3"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
