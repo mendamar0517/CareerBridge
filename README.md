@@ -82,6 +82,7 @@ README.md файл байрлаж, багийн гишүүдийн хийсэн 
 | `docker` | `build-and-test` амжилттай болсны дараа | image build → `/health` smoke test → **зөвхөн `main` руу push хийхэд** GHCR руу push |
 
 Image: `ghcr.io/mendamar0517/careerbridge:latest` болон `:sha-<commit>`.
+Image нь multi-arch: `linux/amd64` (сервер, Render) болон `linux/arm64` (Apple Silicon Mac).
 
 ### Локалд ажиллуулах
 
