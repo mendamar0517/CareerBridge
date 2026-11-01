@@ -3,3 +3,4 @@ coverage/
 .vscode/
 .env
 .DS_Store
+audit.json

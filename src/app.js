@@ -26,6 +26,8 @@ function createApp({ db = null } = {}) {
       const info = await db.check();
       return res.json({ status: 'ok', database: 'postgresql', ...info });
     } catch (err) {
+      // Алдааг логт үлдээнэ (оношлоход хэрэгтэй), хэрэглэгчид дотоод мэдээллийг харуулахгүй
+      console.error('/health/db:', err.message);
       return res.status(503).json({ status: 'error', error: 'Өгөгдлийн сантай холбогдож чадсангүй' });
     }
   });

@@ -27,40 +27,18 @@ describe('isEligibleGraduate() — хэвийн тохиолдол', () => {
 });
 
 describe('isEligibleGraduate() — хилийн (edge case) тохиолдол', () => {
-  test('яг 2 жилийн өмнө төгссөн бол тэнцэнэ (хил багтана)', () => {
-    // Arrange
-    const graduationDate = '2024-10-20';
+  // Лаб 11: SonarJS (parameterized-tests) — ижил бүтэцтэй 4 тестийг нэг хүснэгт болгов
+  test.each([
+    ['яг 2 жилийн өмнө (хил багтана)', '2024-10-20', true],
+    ['2 жил 1 өдрийн өмнө', '2024-10-19', false],
+    ['өнөөдөр', '2026-10-20', true],
+    ['маргааш (ирээдүй)', '2026-10-21', false],
+  ])('%s төгссөн → %s', (_label, graduationDate, expected) => {
+    // Arrange: graduationDate, expected (хүснэгтээс)
     // Act
     const result = isEligibleGraduate(graduationDate, NOW);
     // Assert
-    expect(result).toBe(true);
-  });
-
-  test('2 жил 1 өдрийн өмнө төгссөн бол тэнцэхгүй', () => {
-    // Arrange
-    const graduationDate = '2024-10-19';
-    // Act
-    const result = isEligibleGraduate(graduationDate, NOW);
-    // Assert
-    expect(result).toBe(false);
-  });
-
-  test('өнөөдөр төгссөн бол тэнцэнэ', () => {
-    // Arrange
-    const graduationDate = '2026-10-20';
-    // Act
-    const result = isEligibleGraduate(graduationDate, NOW);
-    // Assert
-    expect(result).toBe(true);
-  });
-
-  test('маргааш (ирээдүйд) төгсөх огноог татгалзана', () => {
-    // Arrange
-    const graduationDate = '2026-10-21';
-    // Act
-    const result = isEligibleGraduate(graduationDate, NOW);
-    // Assert
-    expect(result).toBe(false);
+    expect(result).toBe(expected);
   });
 
   test.each([

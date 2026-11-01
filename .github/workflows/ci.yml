@@ -56,6 +56,25 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Лаб 11: статик шинжилгээ (ESLint + security + sonarjs + n)
+      - name: Lint (ESLint)
+        run: npm run lint
+
+      # Лаб 11: production хамаарал High/Critical эмзэг байдалгүй байх ёстой (image-д ордог)
+      - name: npm audit (production)
+        run: npm audit --omit=dev --audit-level=high
+
+      # Бүх хамаарал (dev орно): Critical байвал унана, бусдыг summary-д тайлагнана
+      - name: npm audit (all dependencies)
+        run: |
+          npm audit --json > audit.json || true
+          node -e '
+            const m = require("./audit.json").metadata.vulnerabilities;
+            console.log(["### npm audit", "| Critical | High | Moderate | Low | Нийт |", "|---|---|---|---|---|",
+              `| ${m.critical} | ${m.high} | ${m.moderate} | ${m.low} | ${m.total} |`].join("\n"));
+          ' >> "$GITHUB_STEP_SUMMARY"
+          npm audit --audit-level=critical
+
       # 4. DB схем ачаалах (db/init/01_schema.sql: 18 хүснэгт, 2 view)
       - name: Load database schema
         run: psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -q -f db/init/01_schema.sql
