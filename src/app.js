@@ -4,7 +4,8 @@ const express = require('express');
 const { validateRegistration } = require('./registration');
 const { version } = require('../package.json');
 
-function createApp() {
+// db: createDb()-ийн буцаасан объект эсвэл null (DB тохируулаагүй)
+function createApp({ db = null } = {}) {
   const app = express();
   app.disable('x-powered-by');
   app.use(express.json({ limit: '100kb' }));
@@ -12,6 +13,19 @@ function createApp() {
   // Docker HEALTHCHECK, CI-ийн smoke test, Render-ийн health check ашиглана
   app.get('/health', (req, res) => {
     res.json({ status: 'ok', service: 'careerbridge-api', version, uptime: Math.round(process.uptime()) });
+  });
+
+  // Өгөгдлийн сантай холбогдож байгаа эсэх (Docker Compose: api → db)
+  app.get('/health/db', async (req, res) => {
+    if (!db) {
+      return res.status(503).json({ status: 'unavailable', error: 'DATABASE_URL тохируулаагүй' });
+    }
+    try {
+      const info = await db.check();
+      return res.json({ status: 'ok', database: 'postgresql', ...info });
+    } catch (err) {
+      return res.status(503).json({ status: 'error', error: 'Өгөгдлийн сантай холбогдож чадсангүй' });
+    }
   });
 
   // US-01: бүртгэлийн өгөгдлийг шалгах (DB холбогдохоос өмнөх түр endpoint)

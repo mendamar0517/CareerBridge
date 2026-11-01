@@ -78,7 +78,7 @@ README.md файл байрлаж, багийн гишүүдийн хийсэн 
 
 | Job | Хэзээ ажиллах | Алхмууд |
 | --- | --- | --- |
-| `build-and-test` | push, PR → `main` | checkout → Node.js 20 → `npm ci` → `npm test` |
+| `build-and-test` | push, PR → `main` | PostgreSQL 16 service → checkout → Node.js 20 → `npm ci` → схем ачаалах → `npm test` |
 | `docker` | `build-and-test` амжилттай болсны дараа | image build → `/health` smoke test → **зөвхөн `main` руу push хийхэд** GHCR руу push |
 
 Image: `ghcr.io/mendamar0517/careerbridge:latest` болон `:sha-<commit>`.
@@ -113,6 +113,7 @@ Package нь **public** тул нэвтрэлтгүй pull хийнэ.
 | Method | Зам | Тайлбар |
 | --- | --- | --- |
 | `GET` | `/health` | Төлөв шалгах (Docker HEALTHCHECK, CI smoke test) |
+| `GET` | `/health/db` | PostgreSQL холболт: хүснэгт, view-ийн тоо (DB байхгүй бол 503) |
 | `POST` | `/api/v1/registrations/validate` | US-01 бүртгэлийн өгөгдлийг шалгах: 200 эсвэл 400 + `errors` |
 
 ### Pipeline-ийн баталгаажуулалт (2026-10-23)
@@ -133,4 +134,8 @@ Package нь **public** тул нэвтрэлтгүй pull хийнэ.
 
 - Production (Render) руу байршуулах: GHCR image + deploy hook (`secrets.RENDER_DEPLOY_HOOK`).
 - PostgreSQL (Neon) холболт: `DATABASE_URL` environment variable.
+
+## Лаборатори 08 — Docker
+
+Dockerfile, image бүтээх, ажиллуулах, Docker Compose болон layer caching-ийн алхмууд: [docs/lab08.md](docs/lab08.md).
 
