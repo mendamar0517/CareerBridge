@@ -8,7 +8,7 @@
 # өөрчлөгддөг кодыг (src/) хамгийн сүүлд хуулна. Код л өөрчлөгдвөл npm ci кэшнээс авна.
 
 # ---------- 1. deps: зөвхөн production хамаарлыг суулгана ----------
-FROM node:20-alpine AS deps
+FROM node:26-alpine AS deps
 WORKDIR /app
 # (1) Зөвхөн хамаарлын жагсаалт — package*.json өөрчлөгдөөгүй бол дараагийн RUN кэшнээс
 COPY package.json package-lock.json ./
@@ -16,7 +16,7 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 
 # ---------- 2. runtime: жижиг, root бус хэрэглэгчтэй image ----------
-FROM node:20-alpine AS runtime
+FROM node:26-alpine AS runtime
 ENV NODE_ENV=production \
     PORT=3000
 WORKDIR /app
