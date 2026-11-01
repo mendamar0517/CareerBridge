@@ -143,3 +143,7 @@ Dockerfile, image бүтээх, ажиллуулах, Docker Compose болон 
 
 Deployment (3 replica), Service (NodePort 30080), self-healing: [docs/lab09.md](docs/lab09.md). Manifest-ууд: [`k8s/`](k8s/).
 
+## Лаборатори 10 — Автомат тест
+
+AAA бүтэцтэй unit тест, хилийн тохиолдол, `jest.fn()` mock, CI дээрх coverage: [docs/lab10.md](docs/lab10.md).
+
