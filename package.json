@@ -1,6 +1,6 @@
 {
   "name": "careerbridge",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "CareerBridge — залуучуудын ажилд орох бэлтгэлийг дэмжих веб платформ (Sprint 1 үндсэн логик)",
   "main": "src/index.js",
   "scripts": {
@@ -14,7 +14,8 @@
     "supertest": "^7.3.1"
   },
   "dependencies": {
-    "express": "^4.22.3"
+    "express": "^4.22.3",
+    "pg": "^8.23.1"
   },
   "engines": {
     "node": ">=20"

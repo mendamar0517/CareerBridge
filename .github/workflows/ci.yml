@@ -21,6 +21,25 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    # Integration тестэд зориулсан PostgreSQL 16 (docker-compose-той ижил хувилбар)
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: careerbridge
+          POSTGRES_PASSWORD: careerbridge
+          POSTGRES_DB: careerbridge
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U careerbridge"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://careerbridge:careerbridge@localhost:5432/careerbridge
+
     steps:
       # 1. Checkout – repo-гийн кодыг runner руу татах
       - name: Checkout repository
@@ -37,7 +56,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # 4. Test – unit болон API тест ажиллуулах
+      # 4. DB схем ачаалах (db/init/01_schema.sql: 18 хүснэгт, 2 view)
+      - name: Load database schema
+        run: psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -q -f db/init/01_schema.sql
+
+      # 5. Test – unit, API болон PostgreSQL integration тест
       - name: Run tests
         run: npm test
 
