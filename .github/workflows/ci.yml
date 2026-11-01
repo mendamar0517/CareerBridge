@@ -60,9 +60,29 @@ jobs:
       - name: Load database schema
         run: psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -q -f db/init/01_schema.sql
 
-      # 5. Test – unit, API болон PostgreSQL integration тест
-      - name: Run tests
-        run: npm test
+      # 5. Test – unit, API, mock болон PostgreSQL integration тест + coverage (босго 80%)
+      - name: Run tests with coverage
+        run: npm run test:coverage
+
+      - name: Coverage summary
+        if: always()
+        run: |
+          if [ -f coverage/coverage-summary.json ]; then
+            node -e '
+              const t = require("./coverage/coverage-summary.json").total;
+              const row = (k) => `| ${k} | ${t[k].pct}% | ${t[k].covered}/${t[k].total} |`;
+              console.log(["### Test coverage", "| Хэмжүүр | % | Хамрагдсан |", "|---|---|---|",
+                ...["lines", "branches", "functions", "statements"].map(row)].join("\n"));
+            ' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 14
 
   # ---------------------------------------------------------------
   # 2. Docker image build → smoke test → GHCR руу push
