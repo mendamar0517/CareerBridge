@@ -1,0 +1,18 @@
+# CareerBridge API — Kubernetes Service (Лаб 09)
+# Хэрэгжүүлэх: kubectl apply -f k8s/service.yaml
+# Хандах:      minikube service careerbridge-api --url
+apiVersion: v1
+kind: Service
+metadata:
+  name: careerbridge-api
+  labels:
+    app: careerbridge-api
+spec:
+  type: NodePort                    # Cluster-ийн гадна (Minikube node-ийн порт) нээнэ
+  selector:
+    app: careerbridge-api           # Deployment-ийн Pod-уудын label → 3 Pod-д ачааллыг хуваана
+  ports:
+    - name: http
+      port: 80                      # Cluster дотор: careerbridge-api:80
+      targetPort: http              # Pod-ийн containerPort 3000
+      nodePort: 30080               # Гаднаас: <minikube ip>:30080

@@ -8,6 +8,7 @@ describe('API – суурь endpoint-ууд', () => {
     const res = await request(app).get('/health');
     expect(res.status).toBe(200);
     expect(res.body.status).toBe('ok');
+    expect(typeof res.body.instance).toBe('string');
   });
 
   test('POST /api/v1/registrations/validate — зөв өгөгдөл 200', async () => {

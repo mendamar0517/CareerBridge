@@ -112,7 +112,7 @@ Package нь **public** тул нэвтрэлтгүй pull хийнэ.
 
 | Method | Зам | Тайлбар |
 | --- | --- | --- |
-| `GET` | `/health` | Төлөв шалгах (Docker HEALTHCHECK, CI smoke test) |
+| `GET` | `/health` | Төлөв шалгах (Docker HEALTHCHECK, k8s probe). `instance` = контейнер/Pod-ийн нэр |
 | `GET` | `/health/db` | PostgreSQL холболт: хүснэгт, view-ийн тоо (DB байхгүй бол 503) |
 | `POST` | `/api/v1/registrations/validate` | US-01 бүртгэлийн өгөгдлийг шалгах: 200 эсвэл 400 + `errors` |
 
@@ -138,4 +138,8 @@ Package нь **public** тул нэвтрэлтгүй pull хийнэ.
 ## Лаборатори 08 — Docker
 
 Dockerfile, image бүтээх, ажиллуулах, Docker Compose болон layer caching-ийн алхмууд: [docs/lab08.md](docs/lab08.md).
+
+## Лаборатори 09 — Kubernetes (Minikube)
+
+Deployment (3 replica), Service (NodePort 30080), self-healing: [docs/lab09.md](docs/lab09.md). Manifest-ууд: [`k8s/`](k8s/).
 

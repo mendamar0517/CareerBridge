@@ -155,3 +155,75 @@ jobs:
           echo '```' >> "$GITHUB_STEP_SUMMARY"
           echo "${{ steps.meta.outputs.tags }}" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+  # ---------------------------------------------------------------
+  # 3. Kubernetes (Лаб 09) — kind cluster дээр k8s/ manifest-уудыг шалгах
+  #    Deployment 3/3 Ready → Service-ээр хандах → Pod устгаж self-healing
+  # ---------------------------------------------------------------
+  k8s:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate manifests (kubeconform)
+        run: |
+          docker run --rm -v "$PWD/k8s:/k8s:ro" ghcr.io/yannh/kubeconform:v0.6.7 \
+            -strict -summary -kubernetes-version 1.31.0 /k8s
+
+      # Энэ commit-ийн кодоор image бүтээж cluster-т ачаална (GHCR-ээс татахгүй)
+      - name: Build image
+        run: docker build -t careerbridge-api:ci .
+
+      - name: Create kind cluster
+        uses: helm/kind-action@v1
+        with:
+          cluster_name: lab09
+
+      - name: Load image into cluster
+        run: kind load docker-image careerbridge-api:ci --name lab09
+
+      - name: Apply Deployment and Service
+        run: |
+          kubectl apply -f k8s/
+          # CI дээр локал image ашиглах (manifest нь GHCR-ийн :latest-ийг заадаг)
+          kubectl patch deployment careerbridge-api --type=json -p='[
+            {"op":"replace","path":"/spec/template/spec/containers/0/image","value":"careerbridge-api:ci"},
+            {"op":"replace","path":"/spec/template/spec/containers/0/imagePullPolicy","value":"IfNotPresent"}]'
+          kubectl rollout status deployment/careerbridge-api --timeout=120s
+
+      - name: Check 3 Pods are Ready
+        run: |
+          kubectl get deployment,pods,service -l app=careerbridge-api -o wide
+          ready=$(kubectl get deployment careerbridge-api -o jsonpath='{.status.readyReplicas}')
+          echo "Ready replicas: $ready"
+          test "$ready" = "3"
+
+      # Minikube-ийн `minikube service`-тэй адил: node-ийн IP:30080 (NodePort) → kube-proxy → 3 Pod
+      - name: Access API through Service (NodePort 30080)
+        run: |
+          node_ip=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}')
+          url="http://$node_ip:30080/health"
+          echo "Service URL: $url"
+          for i in $(seq 1 15); do curl -fsS "$url" && break; sleep 2; done
+          echo
+          echo "10 хүсэлтийг хариулсан Pod (instance):"
+          for i in $(seq 1 10); do curl -fsS "$url" | sed 's/.*"instance":"\([^"]*\)".*/\1/'; done | sort | uniq -c
+
+      - name: Self-healing — delete a Pod
+        run: |
+          victim=$(kubectl get pods -l app=careerbridge-api -o jsonpath='{.items[0].metadata.name}')
+          echo "Устгах Pod: $victim"
+          kubectl delete pod "$victim" --wait=false
+          for i in $(seq 1 30); do
+            ready=$(kubectl get deployment careerbridge-api -o jsonpath='{.status.readyReplicas}')
+            if [ "$ready" = "3" ] && ! kubectl get pod "$victim" >/dev/null 2>&1; then
+              echo "Self-healing амжилттай: шинэ Pod үүсэж 3/3 Ready"
+              kubectl get pods -l app=careerbridge-api
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Self-healing амжилтгүй"; kubectl get pods -l app=careerbridge-api; kubectl get events --sort-by=.lastTimestamp | tail -20; exit 1
