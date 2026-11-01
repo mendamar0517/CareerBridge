@@ -1,9 +1,14 @@
 // US-01 – Ажил горилогчийн бүртгэл
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Лаб 11: ReDoS засвар. Домэйны эхний хэсэг цэггүй тул тааруулах хуваалт ганцхан
+// → backtracking шугаман. Давхар quantifier ашиглаагүй (security/detect-unsafe-regex).
+const EMAIL_REGEX = /^[^\s@]+@[^\s@.]+\.[^\s@]+$/;
+const MAX_EMAIL_LENGTH = 254; // RFC 5321-ийн хязгаар; урт оролтыг regex-ээс өмнө татгалзана
 const MIN_PASSWORD_LENGTH = 8;
 
 function isValidEmail(email) {
-  return typeof email === 'string' && EMAIL_REGEX.test(email.trim());
+  if (typeof email !== 'string') return false;
+  const value = email.trim();
+  return value.length <= MAX_EMAIL_LENGTH && !value.includes('..') && EMAIL_REGEX.test(value);
 }
 
 function isValidPassword(password) {
@@ -11,7 +16,7 @@ function isValidPassword(password) {
     typeof password === 'string' &&
     password.length >= MIN_PASSWORD_LENGTH &&
     /[A-Za-z]/.test(password) &&
-    /[0-9]/.test(password)
+    /\d/.test(password)
   );
 }
 
@@ -23,4 +28,4 @@ function validateRegistration({ fullName, email, password } = {}) {
   return { valid: errors.length === 0, errors };
 }
 
-module.exports = { isValidEmail, isValidPassword, validateRegistration, MIN_PASSWORD_LENGTH };
+module.exports = { isValidEmail, isValidPassword, validateRegistration, MIN_PASSWORD_LENGTH, MAX_EMAIL_LENGTH };

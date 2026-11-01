@@ -1,0 +1,31 @@
+
+eslint.config.js
+  3:20  error  "@eslint/js" is not published              n/no-unpublished-require
+  4:25  error  "globals" is not published                 n/no-unpublished-require
+  5:22  error  "eslint-plugin-jest" is not published      n/no-unpublished-require
+  6:26  error  "eslint-plugin-security" is not published  n/no-unpublished-require
+  7:25  error  "eslint-plugin-sonarjs" is not published   n/no-unpublished-require
+  8:19  error  "eslint-plugin-n" is not published         n/no-unpublished-require
+
+src/app.js
+  28:7   error  Handle this exception, don't catch it at all, or explain in a comment why it is ignored  sonarjs/no-ignored-exceptions
+  28:14  error  'err' is defined but never used                                                          no-unused-vars
+
+src/registration.js
+   2:21  error  Simplify this regular expression to reduce its runtime, as it has super-linear performance due to backtracking  sonarjs/super-linear-regex
+  14:6   error  Use concise character class syntax '\d' instead of '[0-9]'                                                      sonarjs/concise-regex
+
+src/server.js
+  18:7  error  Don't use process.exit(); throw an error instead  n/no-process-exit
+
+tests/app.test.js
+  1:25  error  "supertest" is not published  n/no-unpublished-require
+
+tests/db.test.js
+  1:25  error  "supertest" is not published  n/no-unpublished-require
+
+tests/lab10.eligibility.test.js
+  30:8  error  Replace these 4 tests with a single Parameterized one  sonarjs/parameterized-tests
+
+✖ 14 problems (14 errors, 0 warnings)
+

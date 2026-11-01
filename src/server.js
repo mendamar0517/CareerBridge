@@ -13,9 +13,10 @@ const server = createApp({ db }).listen(PORT, () => {
 for (const signal of ['SIGTERM', 'SIGINT']) {
   process.on(signal, () => {
     console.log(`${signal} хүлээн авлаа, сервер зогсож байна…`);
+    // process.exit() биш: холболтууд хаагдсаны дараа процесс өөрөө хэвийн дуусна
     server.close(async () => {
       if (db) await db.close();
-      process.exit(0);
+      process.exitCode = 0;
     });
   });
 }

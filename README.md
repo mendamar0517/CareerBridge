@@ -147,3 +147,7 @@ Deployment (3 replica), Service (NodePort 30080), self-healing: [docs/lab09.md](
 
 AAA бүтэцтэй unit тест, хилийн тохиолдол, `jest.fn()` mock, CI дээрх coverage: [docs/lab10.md](docs/lab10.md).
 
+## Лаборатори 11 — Статик шинжилгээ, эмзэг байдал
+
+ESLint (security, sonarjs, n), `npm audit`, Dependabot, CI gate: [docs/lab11.md](docs/lab11.md).
+
