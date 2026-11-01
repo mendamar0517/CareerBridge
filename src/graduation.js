@@ -7,7 +7,7 @@ function isEligibleGraduate(graduationDate, now = new Date()) {
   if (grad > now) return false; // ирээдүйн огноо хүлээн авахгүй
   const limit = new Date(now);
   limit.setFullYear(limit.getFullYear() - MAX_YEARS_SINCE_GRADUATION);
-  return grad >= limit;
+  return grad > limit;
 }
 
 module.exports = { isEligibleGraduate, MAX_YEARS_SINCE_GRADUATION };
