@@ -141,7 +141,7 @@ jobs:
 
       # Image-ийг build хийж runner дээр ачаалах (push хийхээс өмнө шалгах)
       - name: Build image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           load: true
@@ -177,7 +177,7 @@ jobs:
       # amd64 хэсэг нь cache-ээс дахин ашиглагдана.
       - name: Push image to GHCR
         if: env.PUSH_IMAGE == 'true'
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           platforms: linux/amd64,linux/arm64
