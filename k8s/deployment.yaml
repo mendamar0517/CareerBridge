@@ -1,0 +1,63 @@
+# CareerBridge API — Kubernetes Deployment (Лаб 09)
+# Хэрэгжүүлэх: kubectl apply -f k8s/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: careerbridge-api
+  labels:
+    app: careerbridge-api
+spec:
+  replicas: 3                       # Ижил Pod 3 хувь; нэг нь унавал бусад нь үйлчилсээр байна
+  selector:
+    matchLabels:
+      app: careerbridge-api         # Энэ label-тэй Pod-уудыг Deployment удирдана
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1             # Шинэчлэх үед хамгийн багадаа 2 Pod ажиллаж байна
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: careerbridge-api
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000             # Dockerfile-ийн USER node (uid 1000)
+      containers:
+        - name: api
+          # Лаб 07–08: CI-ээр бүтээж GHCR руу push хийсэн image (amd64 + arm64)
+          image: ghcr.io/mendamar0517/careerbridge:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: PORT
+              value: "3000"
+          # Pod хүсэлт хүлээн авахад бэлэн эсэх → бэлэн болсон Pod руу л Service урсгал чиглүүлнэ
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          # Container гацвал kubelet дахин эхлүүлнэ
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false

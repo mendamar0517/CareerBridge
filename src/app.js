@@ -1,5 +1,6 @@
 // CareerBridge API — Express аппын тохиргоо
 // Сервер асаахаас тусад нь байлгаснаар Supertest-ээр порт нээлгүйгээр турших боломжтой.
+const os = require('os');
 const express = require('express');
 const { validateRegistration } = require('./registration');
 const { version } = require('../package.json');
@@ -12,7 +13,8 @@ function createApp({ db = null } = {}) {
 
   // Docker HEALTHCHECK, CI-ийн smoke test, Render-ийн health check ашиглана
   app.get('/health', (req, res) => {
-    res.json({ status: 'ok', service: 'careerbridge-api', version, uptime: Math.round(process.uptime()) });
+    // instance: контейнерийн hostname = Kubernetes дээр Pod-ийн нэр (Лаб 09: аль Pod хариулсныг харах)
+    res.json({ status: 'ok', service: 'careerbridge-api', version, instance: os.hostname(), uptime: Math.round(process.uptime()) });
   });
 
   // Өгөгдлийн сантай холбогдож байгаа эсэх (Docker Compose: api → db)
