@@ -132,7 +132,7 @@ jobs:
       # Image-ийн нэр, tag: ghcr.io/<owner>/<repo>:sha-xxxxxxx, :latest
       - name: Docker metadata (tags, labels)
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
