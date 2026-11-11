@@ -1,8 +1,8 @@
 {
   "name": "careerbridge",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": true,
-  "description": "CareerBridge — залуучуудын ажилд орох бэлтгэлийг дэмжих веб платформ (Sprint 1 үндсэн логик)",
+  "description": "CareerBridge — залуучуудын ажилд орох бэлтгэлийг дэмжих веб платформ (REST API + React frontend)",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/server.js",
@@ -24,9 +24,13 @@
     "supertest": "^7.3.1"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "express": "^5.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "pdfkit": "^0.20.2",
     "pg": "^8.23.1",
-    "prom-client": "^15.1.3"
+    "prom-client": "^15.1.3",
+    "zod": "^4.6.7"
   },
   "engines": {
     "node": ">=22"
@@ -42,6 +46,9 @@
       "text-summary",
       "lcov",
       "json-summary"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/web/"
     ],
     "coverageThreshold": {
       "global": {

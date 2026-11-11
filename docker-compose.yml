@@ -1,6 +1,7 @@
 # CareerBridge — локал хөгжүүлэлтийн орчин
 # Ажиллуулах: docker compose up -d --build
-#   API:        http://localhost:3000/health   (metrics: /metrics)
+#   Веб + API:  http://localhost:3000          (health: /health, metrics: /metrics)
+#   Демо бүртгэл (db/init/02_seed.sql): seeker@careerbridge.test / employer@careerbridge.test, нууц үг Demo1234
 #   Prometheus: http://localhost:9090          (Лаб 13)
 #   Grafana:    http://localhost:3001          (Лаб 13, admin / admin)
 services:
@@ -12,6 +13,8 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3000
+      # JWT гарын үсгийн түлхүүр — локалд анхдагч утга, production-д заавал солино
+      JWT_SECRET: ${JWT_SECRET:-careerbridge-local-dev-secret}
       # Контейнер дотроос DB-д "db" нэрээр хандана (localhost биш)
       DATABASE_URL: postgresql://${POSTGRES_USER:-careerbridge}:${POSTGRES_PASSWORD:-careerbridge}@db:5432/${POSTGRES_DB:-careerbridge}?schema=public
     ports:

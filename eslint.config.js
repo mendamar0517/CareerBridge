@@ -9,7 +9,7 @@ const n = require('eslint-plugin-n');
 
 module.exports = [
   // Шалгахгүй хавтас: хамаарал, coverage тайлан
-  { ignores: ['node_modules/', 'coverage/'] },
+  { ignores: ['node_modules/', 'coverage/', 'web/'] }, // web/ — Vite/React (ESM, JSX), тусдаа build
 
   // Суурь дүрмийн багц:
   //  - ESLint recommended: түгээмэл алдаа (ашиглагдаагүй хувьсагч, тодорхойлогдоогүй нэр …)

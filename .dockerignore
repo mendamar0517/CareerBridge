@@ -1,5 +1,7 @@
 # Image-д орох шаардлагагүй файлууд (хэмжээ, нууцлал)
 node_modules
+web/node_modules
+web/dist
 npm-debug.log
 .git
 .github
