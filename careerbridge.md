@@ -1,7 +1,7 @@
 # CareerBridge — төслийн мэдээллийн файл
 
 > F.CSA316 «Программ хангамж хөгжүүлэлтийн процесс» (багш Ж.Алимаа), ШУТИС-МХТС.
-> Сүүлд шинэчилсэн: 2026-11-11 (11-р долоо хоног, Лаб 12-ын дараа).
+> Сүүлд шинэчилсэн: 2026-11-11 (11-р долоо хоног, Лаб 13-ын дараа).
 > Тэмдэглэгээ: **[мэдээлэл хэрэгтэй]** гэсэн хэсгийг өмнөх лабораторийн бодит өгөгдлөөр нөхөнө.
 > «Санал / төлөвлөгөө» гэж тэмдэглэсэн өгөгдөл нь бодит хэмжилт биш.
 
@@ -82,7 +82,8 @@ Sprint 1 (Лаб 03):
 | `skills.js` | US-04 ур чадвар | 07 |
 | `eligibility.js` | US-02 `getSeekerEligibility(repo, …)` (repository-г гаднаас дамжуулна) | 10 |
 | `auth.js` | US-01 нэвтрэлт `authenticate(credentials, userRepo, hasher)` | 12 |
-| `app.js`, `server.js` | Express 4: `GET /health`, `GET /health/db`, `POST /api/v1/registrations/validate` | 07, 08 |
+| `app.js`, `server.js` | Express 5: `GET /health`, `GET /health/db`, `GET /metrics`, `POST /api/v1/registrations/validate` | 07, 08, 13 |
+| `metrics.js` | Prometheus metrics (prom-client) | 13 |
 | `db.js` | PostgreSQL холболт (`pg` Pool) | 08 |
 
 UI давхарга болон бизнесийн API endpoint-ууд (профайл, ажлын байр, хүсэлт гэх мэт) хараахан байхгүй.
@@ -102,6 +103,7 @@ UI давхарга болон бизнесийн API endpoint-ууд (проф�
 | Лаб 10 (11-01, PR #33) | Автомат тест | `tests/lab10.eligibility.test.js`: хэвийн 2, хилийн 8, `jest.fn()` mock 5. Coverage босго 80%. PR дээр ✅ → ❌ (`>=` → `>`, docker/k8s skipped) → ✅. Хуучин 20 тест хилийн алдааг илрүүлээгүй, шинэ тест илрүүлсэн |
 | Лаб 11 (11-01, PR #34) | Статик шинжилгээ | ESLint 9 (recommended + security + sonarjs + n + jest): 14 → 0. ReDoS (имэйлийн regex, 80 KB оролтод 4.4 с → 0.7 мс). npm audit: 31 (Moderate 27, Low 4), бүгд dev, production 0. CI-д lint + audit gate, Dependabot |
 | Лаб 12 (11-11, PR #47) | AI ашиглан код бичих, review | `src/auth.js` `authenticate()` (US-01). AI-ийн анхны код `f0ce8eb`, review-ийн засвар `d05b4d1`. Ерөнхий prompt → Python (буруу), тодорхой prompt → шаардлагын 7 зүйл бүгд. Review: 4 асуудал ([High] fail-open `isActive` → `!== true`; [Medium] lint; [Low] давхардал, тестийн өгөгдөл). `auth.test.js` 46 тест |
+| Лаб 13 (11-11, PR #48) | Prometheus, Grafana | `src/metrics.js` (prom-client): `http_requests_total`, `http_request_duration_seconds`, Node.js metrics; `GET /metrics`. Compose-д Prometheus (9090), Grafana (3001), provisioning-оор data source + 8 panel-тай dashboard. Alert: `HighRequestRate` (> 5 req/s), `HighLatencyP95`, `ApiDown`. Ачааллын үед: 8.35 req/s, 494 хүсэлт, p95 4.76 мс, `HighRequestRate` firing. CI `monitoring` job. CI-ийн Node 20 → 26 |
 
 ## 6. Хуваарь
 
@@ -163,6 +165,7 @@ Sprint бүрийн SP (Лаб 03-ын үнэлгээгээр):
 | Kubernetes manifest (Deployment, Service) | **Бэлэн** (Лаб 09) |
 | Unit + integration тест, CI ногоон, coverage ≥ 80% | **Бэлэн** (Лаб 10). CI дээр lines 97.29%, branches 89.79% (Лаб 11-ийн үед) |
 | Статик шинжилгээ, dependency scan | **Бэлэн** (Лаб 11) |
+| Хяналт: Prometheus metrics, Grafana dashboard, alert | **Бэлэн** (Лаб 13) |
 | Байршуулсан демо хувилбар (Render, URL) | Төлөвлөсөн |
 | REST API ба OpenAPI (Swagger) баримт бичиг | Төлөвлөсөн |
 | Migration болон seed-тэй өгөгдлийн сан (Prisma) | Төлөвлөсөн. Одоо `db/init/01_schema.sql` + `pg` |
@@ -190,7 +193,7 @@ Sprint бүрийн SP (Лаб 03-ын үнэлгээгээр):
 
 | Давхарга | Технологи | Үндэслэл |
 |---|---|---|
-| Хэл | JavaScript (Node.js) | Нэг хэлээр frontend ба backend хоёуланг бичнэ. **Одоо:** Docker image `node:26-alpine` (Dependabot PR #35), CI тест Node 20 → нийцүүлэх шаардлагатай |
+| Хэл | JavaScript (Node.js 26) | Нэг хэлээр frontend ба backend хоёуланг бичнэ. Docker image `node:26-alpine`, CI Node 26 (PR #48-аар нийцүүлсэн), `engines >=22` |
 | Backend | Express.js 4, REST API | Энгийн, сурахад хурдан. `src/` дахь validation функцуудыг дахин ашиглана |
 | Оролтын шалгалт | Zod | Request body-г шалгах, алдааны мэдээлэл буцаах (US-01) |
 | ORM / migration | Prisma | Migration, seed, төрлийн аюулгүй query. View болон функционал индексийг custom SQL migration-аар нэмнэ. **Одоо:** `pg` Pool + `db/init/01_schema.sql` (Prisma хараахан нэвтрээгүй) |
@@ -202,6 +205,7 @@ Sprint бүрийн SP (Лаб 03-ын үнэлгээгээр):
 | CI/CD | GitHub Actions: `build-and-test` (lint, audit, PostgreSQL service, coverage) → `docker` (GHCR push) + `k8s` (kind) | Лаб 07–11-д бэлэн болсон |
 | Статик шинжилгээ | ESLint 10 (security, sonarjs, n, jest), `npm audit`, Dependabot | Лаб 11 |
 | Контейнер оркестраци | Kubernetes (Minikube локал, CI дээр kind) | Лаб 09 |
+| Хяналт | Prometheus v3.4, Grafana 12.0, prom-client | Лаб 13 |
 | Орчин | Docker Compose (api + db) | Багийн гишүүн бүрд ижил орчин бүрдүүлнэ |
 | Байршуулалт | Frontend → Vercel, API → Render, DB → Neon (PostgreSQL) | Үнэгүй багцтай. Хязгаарыг байршуулахын өмнө дахин шалгана |
 | Процесс | GitHub Issues + Projects (Kanban) | Одоо ашиглаж буй хэрэгсэл |
@@ -254,7 +258,6 @@ Sprint бүрийн SP (Лаб 03-ын үнэлгээгээр):
 - Sprint 1-ийн Velocity, Cycle Time, Лаб 02, 04–06-ийн үр дүнг энэ файлд нөхөх.
 - K05/K06 (US-03): картын төлөв болон repo-ийн бодит кодын зөрүүг тодруулах.
 - Release plan (6.1): Sprint 2-ын ихэнх US хэрэгжээгүй, Sprint 4 нь capacity-аас 10 SP давсан → хуваарийг дахин хянах.
-- **Node хувилбар:** Docker image `node:26-alpine`, CI тест Node 20 → нийцүүлэх (Лаб 12-ын үед илэрсэн).
 - **Dummy hash-ийн cost:** `src/auth.js`-ийн `DUMMY_PASSWORD_HASH` cost 12. Бүртгэлийн bcrypt cost-той ижил байх ёстой (timing хамгаалалт).
 - npm audit: minimatch (Moderate), deepmerge (Low) нь dev хамааралд байгаа. Эрсдлийг хүлээн зөвшөөрсөн, Dependabot-оор хянана.
 - CI-ийн анхааруулга: `ubuntu-latest` Ubuntu 26 руу шилжиж байгаа.
