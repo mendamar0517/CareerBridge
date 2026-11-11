@@ -49,7 +49,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 26   # Docker image (node:26-alpine)-тэй ижил
           cache: npm
 
       # 3. Install – хамаарал суулгах
@@ -266,3 +266,75 @@ jobs:
             sleep 2
           done
           echo "Self-healing амжилтгүй"; kubectl get pods -l app=careerbridge-api; kubectl get events --sort-by=.lastTimestamp | tail -20; exit 1
+
+  # ---------------------------------------------------------------
+  # 4. Хяналт (Лаб 13) — Docker Compose: API + DB + Prometheus + Grafana
+  #    Prometheus target "up" → ачаалал → metrics → alert firing → Grafana provisioning
+  # ---------------------------------------------------------------
+  monitoring:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Validate Prometheus config and alert rules (promtool)
+        run: |
+          docker run --rm --entrypoint promtool -v "$PWD/monitoring/prometheus:/etc/prometheus:ro" \
+            prom/prometheus:v3.4.0 check config /etc/prometheus/prometheus.yml
+
+      - name: Start stack (api, db, prometheus, grafana)
+        run: docker compose up -d --build --wait --wait-timeout 180
+
+      - name: Prometheus scrapes the API (target up)
+        run: |
+          for i in $(seq 1 30); do
+            up=$(curl -fsS 'http://localhost:9090/api/v1/query?query=up%7Bjob%3D%22careerbridge-api%22%7D' | jq -r '.data.result[0].value[1] // empty')
+            [ "$up" = "1" ] && { echo "careerbridge-api target: up"; exit 0; }
+            sleep 2
+          done
+          curl -s http://localhost:9090/api/v1/targets | jq '.data.activeTargets[] | {job: .labels.job, health, lastError}'; exit 1
+
+      - name: Generate load (10 req/s, 75 s)
+        run: node scripts/load-test.js --url http://localhost:3000 --rps 10 --duration 75
+
+      - name: Metrics collected in Prometheus
+        run: |
+          q() { curl -fsS --get http://localhost:9090/api/v1/query --data-urlencode "query=$1" | jq -r '.data.result[] | "\(.metric | del(.__name__, .job, .instance, .service) | tostring) \(.value[1])"'; }
+          echo "### Prometheus (ачааллын дараа)" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          { echo "sum(http_requests_total) by route,status:"; q 'sum by (route, status) (http_requests_total{job="careerbridge-api"})'
+            echo "request rate (req/s):"; q 'sum(rate(http_requests_total{job="careerbridge-api"}[1m]))'
+            echo "p95 latency (s):"; q 'histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket{job="careerbridge-api"}[1m])))'
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          total=$(curl -fsS --get http://localhost:9090/api/v1/query --data-urlencode 'query=sum(http_requests_total{job="careerbridge-api"})' | jq -r '.data.result[0].value[1]')
+          echo "Нийт хүсэлт: $total"; [ "${total%.*}" -ge 500 ]
+
+      - name: Alert HighRequestRate is firing
+        run: |
+          for i in $(seq 1 12); do
+            state=$(curl -fsS http://localhost:9090/api/v1/alerts | jq -r '[.data.alerts[] | select(.labels.alertname=="HighRequestRate") | .state][0] // "inactive"')
+            echo "HighRequestRate: $state"
+            [ "$state" = "firing" ] && exit 0
+            sleep 5
+          done
+          exit 1
+
+      - name: Grafana — datasource and dashboard provisioned
+        run: |
+          G=http://admin:admin@localhost:3001
+          curl -fsS $G/api/health | jq .
+          curl -fsS $G/api/datasources/uid/prometheus | jq -e '.type == "prometheus"'
+          curl -fsS "$G/api/dashboards/uid/careerbridge-api" | jq -e '.dashboard.panels | length >= 3' 
+          curl -fsS "$G/api/dashboards/uid/careerbridge-api" | jq -r '.dashboard.panels[].title'
+
+      - name: Logs on failure
+        if: failure()
+        run: docker compose logs --tail=80
+
+      - name: Stop stack
+        if: always()
+        run: docker compose down -v
+

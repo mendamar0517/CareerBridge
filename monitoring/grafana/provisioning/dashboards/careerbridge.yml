@@ -1,0 +1,9 @@
+# monitoring/grafana/dashboards/ доторх JSON dashboard-уудыг автоматаар ачаална (Лаб 13)
+apiVersion: 1
+providers:
+  - name: CareerBridge
+    folder: CareerBridge
+    type: file
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards

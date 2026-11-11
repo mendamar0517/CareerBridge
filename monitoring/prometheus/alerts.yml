@@ -1,0 +1,35 @@
+# Alert rule-ууд (Лаб 13)
+# Prometheus UI → Alerts (http://localhost:9090/alerts) хэсэгт төлөв нь харагдана:
+#   inactive → pending (нөхцөл биелсэн, "for" хугацааг хүлээж байна) → firing
+groups:
+  - name: careerbridge-api
+    rules:
+      # Хиймэл ачааллаар шалгахад зориулсан босго: секундэд 5-аас олон хүсэлт 30 секунд үргэлжилбэл
+      - alert: HighRequestRate
+        expr: sum(rate(http_requests_total{job="careerbridge-api"}[1m])) > 5
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: 'CareerBridge API-д ачаалал өндөр байна'
+          description: 'Хүсэлтийн хурд {{ $value | printf "%.1f" }} req/s (босго 5 req/s).'
+
+      # Хүсэлтийн 95% нь 0.5 секундээс удаан бол
+      - alert: HighLatencyP95
+        expr: histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket{job="careerbridge-api"}[1m]))) > 0.5
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: 'CareerBridge API удаан хариулж байна'
+          description: 'p95 хариу өгөх хугацаа {{ $value | printf "%.2f" }} с (босго 0.5 с).'
+
+      # API-аас metrics цуглуулж чадахгүй бол (апп унасан)
+      - alert: ApiDown
+        expr: up{job="careerbridge-api"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: 'CareerBridge API хариу өгөхгүй байна'
+          description: 'Prometheus {{ $labels.instance }}-аас metrics цуглуулж чадсангүй.'

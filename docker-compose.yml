@@ -1,6 +1,8 @@
 # CareerBridge — локал хөгжүүлэлтийн орчин
 # Ажиллуулах: docker compose up -d --build
-#   API: http://localhost:3000/health
+#   API:        http://localhost:3000/health   (metrics: /metrics)
+#   Prometheus: http://localhost:9090          (Лаб 13)
+#   Grafana:    http://localhost:3001          (Лаб 13, admin / admin)
 services:
   api:
     build: .
@@ -39,5 +41,45 @@ services:
       timeout: 3s
       retries: 10
 
+  # ---------- Лаб 13: хяналт (monitoring) ----------
+  prometheus:
+    image: prom/prometheus:v3.4.0
+    container_name: careerbridge-prometheus
+    restart: unless-stopped
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.retention.time=7d
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/alerts.yml:/etc/prometheus/alerts.yml:ro
+      - cb-prometheus:/prometheus
+    depends_on:
+      api:
+        condition: service_healthy
+
+  grafana:
+    image: grafana/grafana:12.0.0
+    container_name: careerbridge-grafana
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      # Нэвтрэлгүйгээр dashboard харах (зөвхөн уншина) — локал лабд зориулав
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/careerbridge-api.json
+    ports:
+      - "${GRAFANA_PORT:-3001}:3000"
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - cb-grafana:/var/lib/grafana
+    depends_on:
+      - prometheus
+
 volumes:
   cb-pgdata:
+  cb-prometheus:
+  cb-grafana:
