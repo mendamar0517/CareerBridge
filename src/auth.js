@@ -1,12 +1,16 @@
 'use strict';
 
+// AI ашигласан: анхны хувилбарыг Claude санал болгосон (Лаб 12, docs/lab12/02-good-prompt-response.md).
+// Хүний review-ийн засвар: docs/lab12/03-review.md
+
 /**
  * CareerBridge — нэвтрэлтийн (login) логик.
  * Гадаад сан импортлохгүй: userRepo, hasher-ийг дуудагч тал дамжуулна.
  * Buffer нь Node.js-ийн глобал объект тул require хэрэггүй.
  */
 
-const MAX_EMAIL_LENGTH = 254;
+// Review №3: бүртгэлтэй (US-01) ижил хязгаарыг дахин тодорхойлохгүй, нэг эх үүсвэрээс авна
+const { MAX_EMAIL_LENGTH } = require('./registration');
 const MIN_PASSWORD_BYTES = 1;
 const MAX_PASSWORD_BYTES = 72; // bcrypt 72 byte-аас хойшхийг хасдаг тул татгалзана
 
@@ -83,7 +87,9 @@ async function authenticate(credentials, userRepo, hasher) {
   }
 
   // Нууц үг зөв гэдэг нь батлагдсаны дараа л идэвхгүй төлөвийг мэдэгдэнэ (шаардлага 4).
-  if (user.isActive === false) {
+  // Review №1 (fail-closed): зөвхөн `true` үед л идэвхтэй гэж үзнэ. `=== false` нөхцөл нь
+  // isActive байхгүй/null/'false'/0 үед идэвхгүй дансыг нэвтрүүлдэг байсан.
+  if (user.isActive !== true) {
     return fail(ERRORS.ACCOUNT_DISABLED);
   }
 

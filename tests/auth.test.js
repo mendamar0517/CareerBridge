@@ -1,5 +1,7 @@
 'use strict';
 
+// AI ашигласан: анхны хувилбарыг Claude санал болгосон (Лаб 12). Review-ийн засвар: docs/lab12/03-review.md
+
 const {
   authenticate,
   ERRORS,
@@ -7,6 +9,8 @@ const {
 } = require('../src/auth');
 
 const VALID_EMAIL = 'user@example.com';
+// Review №2: тестийн fixture, бодит нууц үг биш (sonarjs/no-hardcoded-passwords-ийн худал илрүүлэлт)
+// eslint-disable-next-line sonarjs/no-hardcoded-passwords
 const VALID_PASSWORD = 'Correct-Horse-9';
 const STORED_HASH = '$2b$12$storedHashValueForTestsOnlystoredHashValueForTests12';
 const EMAIL_DOMAIN = '@example.com'; // 12 тэмдэгт
@@ -16,7 +20,7 @@ function buildUser(overrides = {}) {
     id: 42,
     email: VALID_EMAIL,
     passwordHash: STORED_HASH,
-    role: 'candidate',
+    role: 'SEEKER',
     isActive: true,
     ...overrides,
   };
@@ -70,7 +74,7 @@ describe('authenticate — хэвийн тохиолдол', () => {
     // Assert
     expect(result).toEqual({
       ok: true,
-      user: { id: 42, email: VALID_EMAIL, role: 'candidate' },
+      user: { id: 42, email: VALID_EMAIL, role: 'SEEKER' },
     });
     expect(result.user).not.toHaveProperty('passwordHash');
     expect(result.user).not.toHaveProperty('isActive');
@@ -286,6 +290,23 @@ describe('authenticate — аюулгүй байдал', () => {
     expect(hasher.compare).toHaveBeenCalledWith(VALID_PASSWORD, STORED_HASH);
   });
 
+  // Review №1: isActive нь яг `true` биш бол (fail-closed) идэвхгүй гэж үзнэ
+  test.each([
+    ['isActive байхгүй (SELECT-д орхигдсон)', (() => { const u = buildUser(); delete u.isActive; return u; })()],
+    ['isActive: null', buildUser({ isActive: null })],
+    ["isActive: 'false' (string)", buildUser({ isActive: 'false' })],
+    ['isActive: 0', buildUser({ isActive: 0 })],
+  ])('%s + зөв нууц үг → ACCOUNT_DISABLED', async (_label, user) => {
+    // Arrange
+    const { userRepo, hasher } = buildDeps({ user, passwordMatches: true });
+
+    // Act
+    const result = await authenticate({ email: VALID_EMAIL, password: VALID_PASSWORD }, userRepo, hasher);
+
+    // Assert
+    expect(result).toEqual({ ok: false, error: ERRORS.ACCOUNT_DISABLED });
+  });
+
   test.each([
     ['амжилттай', { user: buildUser(), passwordMatches: true }],
     ['нууц үг буруу', { user: buildUser(), passwordMatches: false }],
@@ -328,7 +349,7 @@ describe('authenticate — аюулгүй байдал', () => {
 describe('authenticate — алдааг дээш дамжуулах', () => {
   test('repository алдаа шидвэл тэр алдааг өөрчлөлгүй дамжуулна', async () => {
     // Arrange
-    const dbError = new Error('ORA-12541: TNS:no listener');
+    const dbError = new Error('connect ECONNREFUSED 127.0.0.1:5432');
     const { userRepo, hasher } = buildDeps();
     userRepo.findByEmail.mockRejectedValue(dbError);
 
