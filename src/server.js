@@ -1,10 +1,11 @@
 // CareerBridge API — серверийг асаах цэг (npm start)
 const { createApp } = require('./app');
+const path = require('path');
 const { createDb } = require('./db');
 
 const PORT = Number(process.env.PORT) || 3000;
 const db = createDb();
-const server = createApp({ db }).listen(PORT, () => {
+const server = createApp({ db, staticDir: process.env.STATIC_DIR || path.join(__dirname, '..', 'web', 'dist') }).listen(PORT, () => {
   console.log(`CareerBridge API http://localhost:${PORT} дээр ажиллаж байна`);
   console.log(db ? 'PostgreSQL: DATABASE_URL тохируулсан' : 'PostgreSQL: DATABASE_URL байхгүй (DB-гүй горим)');
 });

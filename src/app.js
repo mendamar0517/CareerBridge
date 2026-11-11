@@ -1,13 +1,19 @@
 // CareerBridge API — Express аппын тохиргоо
 // Сервер асаахаас тусад нь байлгаснаар Supertest-ээр порт нээлгүйгээр турших боломжтой.
+const fs = require('fs');
 const os = require('os');
+const path = require('path');
 const express = require('express');
 const { validateRegistration } = require('./registration');
 const { createMetrics } = require('./metrics');
+const { createTokenService } = require('./tokens');
+const { createApiRouter } = require('./api');
+const { HttpError, mapDbError } = require('./http');
 const { version } = require('../package.json');
 
 // db: createDb()-ийн буцаасан объект эсвэл null (DB тохируулаагүй)
-function createApp({ db = null } = {}) {
+// staticDir: frontend-ийн build (web/dist). Өгвөл SPA-г ижил домэйноос түгээнэ.
+function createApp({ db = null, jwtSecret, bcryptCost = Number(process.env.BCRYPT_COST) || 12, staticDir = null } = {}) {
   const app = express();
   app.disable('x-powered-by');
 
@@ -45,6 +51,17 @@ function createApp({ db = null } = {}) {
     res.status(result.valid ? 200 : 400).json(result);
   });
 
+  // US-01 … US-15: REST API
+  app.use('/api/v1', createApiRouter({ db, tokens: createTokenService(jwtSecret), bcryptCost }));
+
+  // React SPA: файл байвал түгээнэ, бусад GET замд index.html (client-side routing)
+  // staticDir нь серверийн тохиргоо (env), хэрэглэгчийн оролт биш
+  // eslint-disable-next-line security/detect-non-literal-fs-filename
+  if (staticDir && fs.existsSync(path.join(staticDir, 'index.html'))) {
+    app.use(express.static(staticDir, { index: false, maxAge: '1h' }));
+    app.get(/^\/(?!api\/|health|metrics).*/, (req, res) => res.sendFile(path.join(staticDir, 'index.html')));
+  }
+
   app.use((req, res) => {
     res.status(404).json({ error: 'Хуудас олдсонгүй' });
   });
@@ -53,6 +70,10 @@ function createApp({ db = null } = {}) {
   app.use((err, req, res, next) => {
     if (err.type === 'entity.parse.failed') {
       return res.status(400).json({ error: 'JSON формат буруу байна' });
+    }
+    const known = err instanceof HttpError ? err : mapDbError(err);
+    if (known) {
+      return res.status(known.status).json({ error: known.message, ...known.extra });
     }
     console.error(err);
     return res.status(500).json({ error: 'Серверийн алдаа' });
