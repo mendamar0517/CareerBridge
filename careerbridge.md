@@ -1,7 +1,7 @@
 # CareerBridge — төслийн мэдээллийн файл
 
 > F.CSA316 «Программ хангамж хөгжүүлэлтийн процесс» (багш Ж.Алимаа), ШУТИС-МХТС.
-> Сүүлд шинэчилсэн: 2026-10-21 (8-р долоо хоног).
+> Сүүлд шинэчилсэн: 2026-11-11 (11-р долоо хоног, Лаб 12-ын дараа).
 > Тэмдэглэгээ: **[мэдээлэл хэрэгтэй]** гэсэн хэсгийг өмнөх лабораторийн бодит өгөгдлөөр нөхөнө.
 > «Санал / төлөвлөгөө» гэж тэмдэглэсэн өгөгдөл нь бодит хэмжилт биш.
 
@@ -27,25 +27,27 @@ Development Team нь багийн бүх гишүүдээс бүрдэнэ.
 
 ## 3. Product Backlog
 
-Эх сурвалж: GitHub Issues #1–#15.
+Эх сурвалж: GitHub Issues #1–#15. Story Point: Лаб 03-ын Planning Poker (Fibonacci). US-02, 04, 13, 14, 15 дээр үнэлгээ зөрсөн тул хэлэлцэж Final SP тогтоосон.
 
 | US-ID | Нэр | Feature | Story Point |
 |---|---|---|---|
-| US-01 | Ажил горилогчийн бүртгэл | User Management | [мэдээлэл хэрэгтэй] |
-| US-02 | Төгсөлтийн мэдээлэл бүртгэх (2 жилийн шалгуур) | Candidate Profile | [мэдээлэл хэрэгтэй] |
-| US-03 | Ажил горилогчийн профайл (боловсрол, туршлага) | Candidate Profile | [мэдээлэл хэрэгтэй] |
-| US-04 | Ур чадвар бүртгэх | Candidate Profile | [мэдээлэл хэрэгтэй] |
-| US-05 | CV үүсгэх (харах, татах) | Candidate Profile | [мэдээлэл хэрэгтэй] |
-| US-06 | Ажлын байр хайх (мэргэжил, ур чадвар) | Job Search | [мэдээлэл хэрэгтэй] |
-| US-07 | Ажлын байрны мэдээлэл харах | Job Search | [мэдээлэл хэрэгтэй] |
-| US-08 | Ур чадварын тохироо харах | Job Matching | [мэдээлэл хэрэгтэй] |
-| US-09 | Ажлын байранд хүсэлт гаргах (давхар хүсэлтгүй) | Job Application | [мэдээлэл хэрэгтэй] |
-| US-10 | Хүсэлтийн төлөв харах | Job Application | [мэдээлэл хэрэгтэй] |
-| US-11 | Байгууллагын бүртгэл | Employer Management | [мэдээлэл хэрэгтэй] |
-| US-12 | Ажлын байр нийтлэх | Job Management | [мэдээлэл хэрэгтэй] |
-| US-13 | Ажлын байрны шаардлага (ур чадвар) тодорхойлох | Job Management | [мэдээлэл хэрэгтэй] |
-| US-14 | Онлайн шалгалт авах | Online Assessment | [мэдээлэл хэрэгтэй] |
-| US-15 | Ажил горилогчдын мэдээлэл харах (харьцуулах) | Employer Management | [мэдээлэл хэрэгтэй] |
+| US-01 | Ажил горилогчийн бүртгэл | User Management | 3 |
+| US-02 | Төгсөлтийн мэдээлэл бүртгэх (2 жилийн шалгуур) | Candidate Profile | 2 |
+| US-03 | Ажил горилогчийн профайл (боловсрол, туршлага) | Candidate Profile | 5 |
+| US-04 | Ур чадвар бүртгэх | Candidate Profile | 3 |
+| US-05 | CV үүсгэх (харах, татах) | Candidate Profile | 8 |
+| US-06 | Ажлын байр хайх (мэргэжил, ур чадвар) | Job Search | 5 |
+| US-07 | Ажлын байрны мэдээлэл харах | Job Search | 3 |
+| US-08 | Ур чадварын тохироо харах | Job Matching | 8 |
+| US-09 | Ажлын байранд хүсэлт гаргах (давхар хүсэлтгүй) | Job Application | 5 |
+| US-10 | Хүсэлтийн төлөв харах | Job Application | 3 |
+| US-11 | Байгууллагын бүртгэл | Employer Management | 3 |
+| US-12 | Ажлын байр нийтлэх | Job Management | 5 |
+| US-13 | Ажлын байрны шаардлага (ур чадвар) тодорхойлох | Job Management | 5 |
+| US-14 | Онлайн шалгалт авах | Online Assessment | 13 |
+| US-15 | Ажил горилогчдын мэдээлэл харах (харьцуулах) | Employer Management | 8 |
+
+**Нийт: 3+2+5+3+8+5+3+8+5+3+3+5+5+13+8 = 79 SP.**
 
 Acceptance Criteria-г тухайн Issue бүрээс харна.
 
@@ -62,26 +64,48 @@ Acceptance Criteria-г тухайн Issue бүрээс харна.
 | K07 | US-04 | Ур чадвар нэмэх | Closed (#22) |
 | K08 | US-04 | Ур чадварыг профайлтай холбох | Closed (#23) |
 
-Sprint 1-ийн SP, Velocity, Cycle Time: [мэдээлэл хэрэгтэй].
+Sprint 1 (Лаб 03):
+- Sprint = 5 ажлын өдөр.
+- Capacity = (1.5 цаг × 3 хүн) × 5 өдөр × 0.6 = 4.5 × 5 × 0.6 = **13.5 SP**.
+- Төлөвлөсөн: US-01 + US-02 + US-03 + US-04 = 3 + 2 + 5 + 3 = **13 SP** (нөөц 0.5 SP).
+- Sprint Goal: ажил горилогч бүртгүүлж, төгсөлт, боловсрол, ажлын туршлага, ур чадварын мэдээллээ бүртгэн үндсэн профайлаа бүрдүүлэх.
+- Velocity, Cycle Time: [мэдээлэл хэрэгтэй].
 
-**Анхааруулга:** K05 болон K06 хаагдсан боловч repo-д US-03-ийн код, тест байхгүй (2026-10-21-ний байдлаар). Одоогийн `src/` дотор зөвхөн дараах цэвэр логик функцууд байна:
-- `registration.js` (US-01)
-- `graduation.js` (US-02, 2 жилийн шалгуур)
-- `skills.js` (US-04)
+**Анхааруулга:** K05 болон K06 хаагдсан боловч repo-д US-03-ийн код, тест байхгүй (2026-11-11-ний байдлаар).
 
-Өгөгдлийн сан, API болон UI давхарга хараахан байхгүй.
+Одоогийн `src/` (2026-11-11):
+
+| Файл | Агуулга | Лаб |
+|---|---|---|
+| `registration.js` | US-01 бүртгэлийн validation (ReDoS-гүй имэйл regex, `MAX_EMAIL_LENGTH = 254`) | 07, 11 |
+| `graduation.js` | US-02 2 жилийн шалгуур `isEligibleGraduate()` | 07 |
+| `skills.js` | US-04 ур чадвар | 07 |
+| `eligibility.js` | US-02 `getSeekerEligibility(repo, …)` (repository-г гаднаас дамжуулна) | 10 |
+| `auth.js` | US-01 нэвтрэлт `authenticate(credentials, userRepo, hasher)` | 12 |
+| `app.js`, `server.js` | Express 4: `GET /health`, `GET /health/db`, `POST /api/v1/registrations/validate` | 07, 08 |
+| `db.js` | PostgreSQL холболт (`pg` Pool) | 08 |
+
+UI давхарга болон бизнесийн API endpoint-ууд (профайл, ажлын байр, хүсэлт гэх мэт) хараахан байхгүй.
 
 ## 5. Өмнөх лабораторийн үр дүн
 
 | Лаб | Сэдэв | Үр дүн |
 |---|---|---|
 | Лаб 01 | Хөгжүүлэлтийн орчин, Git | Repo, README, Scrum үүрэг, Git workflow |
-| Лаб 02–06 | [мэдээлэл хэрэгтэй] | [мэдээлэл хэрэгтэй] |
-| Лаб 07 | CI | GitHub Actions (`ci.yml`) тохируулсан. Алхмууд: checkout → Node 20 → `npm ci` → `npm test` (Jest). Тестийг санаатайгаар унагаж CI-ийн амжилтгүй үр дүнг шалгасан, дараа нь засварласан |
+| Лаб 02 | [мэдээлэл хэрэгтэй] | [мэдээлэл хэрэгтэй] |
+| Лаб 03 | User Story үнэлгээ, Sprint 1 | Planning Poker: Backlog 79 SP. Capacity 13.5 SP, Sprint 1 = 13 SP (US-01–04). GitHub Projects дээр Backlog, Sprint Board |
+| Лаб 04–06 | [мэдээлэл хэрэгтэй] | [мэдээлэл хэрэгтэй] |
+| Лаб 07 | CI | GitHub Actions (`ci.yml`): checkout → Node 20 → `npm ci` → `npm test` (Jest). Тестийг санаатайгаар унагаж (`8eab14c`) CI улаан болохыг шалгаад засварласан (`feb9089`) |
+| Лаб 07 (нэмэлт, 10-23) | CD | `docker` job: build → smoke test (`/health`) → зөвхөн `main` дээр GHCR руу push (PR #29). amd64 + arm64 multi-arch (PR #30). Image `ghcr.io/mendamar0517/careerbridge` public. Mac дээр pull хийж ажиллуулахад `healthy` |
+| Лаб 08 (11-01, PR #31) | Dockerfile, Image, Compose | Multi-stage Dockerfile (root бус, HEALTHCHECK). Compose: api + db, `/health/db` → 18 хүснэгт, 2 view. Layer caching: зөвхөн код өөрчлөгдөхөд `npm ci` CACHED; `package.json` өөрчлөгдөхөд дахин ажилласан. Build 4.6 с → 1.4 с (бүх layer CACHED) |
+| Лаб 09 (11-01, PR #32) | Kubernetes (Minikube) | `k8s/deployment.yaml` (3 replica, probe, resource limit, uid 1000), `k8s/service.yaml` (NodePort 30080). Minikube: 3/3 Ready. Self-healing: `6vr7m` устгахад `sbcff` 8 с-д `1/1`. CI `k8s` job (kind) |
+| Лаб 10 (11-01, PR #33) | Автомат тест | `tests/lab10.eligibility.test.js`: хэвийн 2, хилийн 8, `jest.fn()` mock 5. Coverage босго 80%. PR дээр ✅ → ❌ (`>=` → `>`, docker/k8s skipped) → ✅. Хуучин 20 тест хилийн алдааг илрүүлээгүй, шинэ тест илрүүлсэн |
+| Лаб 11 (11-01, PR #34) | Статик шинжилгээ | ESLint 9 (recommended + security + sonarjs + n + jest): 14 → 0. ReDoS (имэйлийн regex, 80 KB оролтод 4.4 с → 0.7 мс). npm audit: 31 (Moderate 27, Low 4), бүгд dev, production 0. CI-д lint + audit gate, Dependabot |
+| Лаб 12 (11-11, PR #47) | AI ашиглан код бичих, review | `src/auth.js` `authenticate()` (US-01). AI-ийн анхны код `f0ce8eb`, review-ийн засвар `d05b4d1`. Ерөнхий prompt → Python (буруу), тодорхой prompt → шаардлагын 7 зүйл бүгд. Review: 4 асуудал ([High] fail-open `isActive` → `!== true`; [Medium] lint; [Low] давхардал, тестийн өгөгдөл). `auth.test.js` 46 тест |
 
 ## 6. Хуваарь
 
-- Одоо: **8-р долоо хоног** (2026-10-19 – 10-25).
+- Одоо: **11-р долоо хоног** (2026-11-09 – 11-15).
 - **15-р долоо хоног (2026-12-07 – 12-13): эцсийн демо болон хамгаалалт.**
 - Хүрээ: **US-01 … US-15 бүгдийг хэрэгжүүлнэ.**
 - Долоо хоногийн огноог 8-р долоо хоног 2026-10-19 (Даваа)-нд эхэлнэ гэж тооцож гаргасан.
@@ -103,7 +127,17 @@ Sprint-ийн урт 2 долоо хоног. Үлдсэн 15 US-ийг 3 Sprint
 - US-09-д US-05 (CV) шаардлагатай.
 - US-15-д US-14 шаардлагатай.
 
-Эрсдэл: Sprint 4-т ачаалал их (US-14 бол хамгийн том US). Velocity хүрэлцэхгүй бол US-15-ийн «харьцуулах» шалгуурыг 15-р долоо хоногийн эхэнд шилжүүлэх. SP тооцоо хийгдсэний дараа энэ хуваарийг дахин шалгана.
+Sprint бүрийн SP (Лаб 03-ын үнэлгээгээр):
+- Sprint 2 = 3 + 2 + 5 + 3 + 3 = 16 SP
+- Sprint 3 = 5 + 5 + 5 + 3 + 8 = 26 SP
+- Sprint 4 = 8 + 5 + 3 + 13 + 8 = 37 SP
+- Нийт 16 + 26 + 37 = 79 SP
+
+2 долоо хоногийн Sprint-ийн capacity (Лаб 03-ын томьёогоор, тооцоо): (1.5 × 3) × 10 × 0.6 = 27 SP.
+
+Эрсдэл: Sprint 4 (37 SP) нь 27 SP-ийн capacity-аас 10 SP-ээр давна. US-14 бол хамгийн том US (13 SP). Velocity хүрэлцэхгүй бол US-15-ийн «харьцуулах» шалгуурыг 15-р долоо хоногийн эхэнд шилжүүлэх эсвэл Story-г хуваах.
+
+**Бодит явц (2026-11-11):** Sprint 2-ын (9–10-р долоо хоног) User Story-уудаас зөвхөн US-01-ийн логик (бүртгэлийн validation, `authenticate()`) бэлэн болсон. Endpoint, JWT, US-03, US-11 хэрэгжээгүй. 9–12-р долоо хоногт хичээлийн лабораторийн дагуу CI/CD, Docker, Kubernetes, тест, статик шинжилгээнд анхаарсан. Release plan-ийг дахин хянах шаардлагатай (10-р хэсэг).
 
 ## 7. 15-р долоо хоногт хүлээгдэж буй үр дүн
 
@@ -122,15 +156,23 @@ Sprint-ийн урт 2 долоо хоног. Үлдсэн 15 US-ийг 3 Sprint
 
 ### 7.2. Техникийн үр дүн
 
-- Байршуулсан, ажиллаж буй веб хувилбар (demo URL).
-- REST API ба OpenAPI (Swagger) баримт бичиг.
-- Migration болон seed-тэй PostgreSQL өгөгдлийн сан.
-- Unit + integration тест. CI ногоон төлөвтэй.
-- Docker Compose-оор нэг командаар ажиллуулах боломжтой.
+| Үр дүн | Төлөв (2026-11-11) |
+|---|---|
+| Docker image → GHCR (amd64 + arm64), CI/CD | **Бэлэн** (Лаб 07–08) |
+| Docker Compose: API + PostgreSQL нэг командаар | **Бэлэн** (Лаб 08) |
+| Kubernetes manifest (Deployment, Service) | **Бэлэн** (Лаб 09) |
+| Unit + integration тест, CI ногоон, coverage ≥ 80% | **Бэлэн** (Лаб 10). CI дээр lines 97.29%, branches 89.79% (Лаб 11-ийн үед) |
+| Статик шинжилгээ, dependency scan | **Бэлэн** (Лаб 11) |
+| Байршуулсан демо хувилбар (Render, URL) | Төлөвлөсөн |
+| REST API ба OpenAPI (Swagger) баримт бичиг | Төлөвлөсөн |
+| Migration болон seed-тэй өгөгдлийн сан (Prisma) | Төлөвлөсөн. Одоо `db/init/01_schema.sql` + `pg` |
 
 ### 7.3. Процессын артефакт
 
+Артефакт = багийн төлөвлөгөө, явц, үр дүнг харагдахуйц болгож баримтжуулсан зүйл. Scrum Guide (2020)-ийн 3 үндсэн артефакт: Product Backlog, Sprint Backlog, Increment (жишээ нь GHCR дээрх ажилладаг image). Бусад нь явцыг хэмжих туслах хэрэгсэл.
+
 - Product Backlog (SP-тэй), Sprint бүрийн Sprint Backlog.
+- Increment: Sprint бүрийн ажилладаг хувилбар (GHCR image, демо URL).
 - Burndown, Velocity.
 - Kanban самбар.
 - Sprint Review болон Retrospective-ийн тэмдэглэл.
@@ -142,22 +184,24 @@ Sprint-ийн урт 2 долоо хоног. Үлдсэн 15 US-ийг 3 Sprint
 3. Acceptance Criteria бүгд биелсэн.
 4. Staging орчинд байршсан.
 
-## 8. Технологийн стек (батлагдсан, 2026-10-21)
+## 8. Технологийн стек (батлагдсан 2026-10-21, бодит төлөв 2026-11-11)
 
 Багш технологийн шаардлага тавиагүй тул сонголтыг багийн одоогийн суурь (Node.js 20, Jest, GitHub Actions), 3 хүний бүрэлдэхүүн болон 7 долоо хоногийн хугацаанд тохируулж хийсэн.
 
 | Давхарга | Технологи | Үндэслэл |
 |---|---|---|
-| Хэл | JavaScript (Node.js 20 LTS) | Repo, CI-д ашиглагдаж байгаа. Нэг хэлээр frontend ба backend хоёуланг бичнэ |
+| Хэл | JavaScript (Node.js) | Нэг хэлээр frontend ба backend хоёуланг бичнэ. **Одоо:** Docker image `node:26-alpine` (Dependabot PR #35), CI тест Node 20 → нийцүүлэх шаардлагатай |
 | Backend | Express.js 4, REST API | Энгийн, сурахад хурдан. `src/` дахь validation функцуудыг дахин ашиглана |
 | Оролтын шалгалт | Zod | Request body-г шалгах, алдааны мэдээлэл буцаах (US-01) |
-| ORM / migration | Prisma | Migration, seed, төрлийн аюулгүй query. View болон функционал индексийг custom SQL migration-аар нэмнэ |
+| ORM / migration | Prisma | Migration, seed, төрлийн аюулгүй query. View болон функционал индексийг custom SQL migration-аар нэмнэ. **Одоо:** `pg` Pool + `db/init/01_schema.sql` (Prisma хараахан нэвтрээгүй) |
 | Өгөгдлийн сан | PostgreSQL 16 | 9-р хэсгийг үзнэ үү |
 | Нэвтрэлт | JWT (access token) + bcrypt | Үүргээр эрх хязгаарлах, нууц үгийг hash хэлбэрээр хадгалах |
 | Frontend | React 18 + Vite, React Router, Tailwind CSS | Компонентод суурилсан SPA, хурдан build хийнэ |
 | CV PDF | PDFKit | Сервер талд PDF үүсгэнэ (US-05) |
-| Тест | Jest (байгаа) + Supertest | Unit болон API integration тест |
-| CI | GitHub Actions (байгаа) + PostgreSQL service container | Integration тестийг бодит DB дээр ажиллуулна |
+| Тест | Jest 30 + Supertest | Unit, API, mock, PostgreSQL integration тест. Coverage босго 80% |
+| CI/CD | GitHub Actions: `build-and-test` (lint, audit, PostgreSQL service, coverage) → `docker` (GHCR push) + `k8s` (kind) | Лаб 07–11-д бэлэн болсон |
+| Статик шинжилгээ | ESLint 10 (security, sonarjs, n, jest), `npm audit`, Dependabot | Лаб 11 |
+| Контейнер оркестраци | Kubernetes (Minikube локал, CI дээр kind) | Лаб 09 |
 | Орчин | Docker Compose (api + db) | Багийн гишүүн бүрд ижил орчин бүрдүүлнэ |
 | Байршуулалт | Frontend → Vercel, API → Render, DB → Neon (PostgreSQL) | Үнэгүй багцтай. Хязгаарыг байршуулахын өмнө дахин шалгана |
 | Процесс | GitHub Issues + Projects (Kanban) | Одоо ашиглаж буй хэрэгсэл |
@@ -170,7 +214,7 @@ Sprint-ийн урт 2 долоо хоног. Үлдсэн 15 US-ийг 3 Sprint
 - JSONB: CV-ийн үүсгэсэн үеийн хувилбарыг хадгална.
 - Нээлттэй эх, CI-д service container хэлбэрээр ажилладаг.
 
-**Бүтэц: 18 хүснэгт, 2 view.** Бүтэн DDL нь `claude/careerbridge_schema.sql` файлд байгаа. PostgreSQL 16 дээр туршсан.
+**Бүтэц: 18 хүснэгт, 2 view.** Бүтэн DDL нь `claude/careerbridge_schema.sql` (repo-д `db/init/01_schema.sql`) файлд байгаа. PostgreSQL 16 дээр туршсан. Foreign key: 24.
 
 | Хүснэгт | Үндсэн баганууд | US |
 |---|---|---|
@@ -207,6 +251,10 @@ Sprint-ийн урт 2 долоо хоног. Үлдсэн 15 US-ийг 3 Sprint
 
 ## 10. Нээлттэй асуудал
 
-- Sprint 1-ийн SP, Velocity, Лаб 02–06-ийн үр дүнг энэ файлд нөхөх.
-- Product Backlog-ийн SP-г тогтоож, Release plan (6.1) багтах эсэхийг capacity-аар шалгах.
+- Sprint 1-ийн Velocity, Cycle Time, Лаб 02, 04–06-ийн үр дүнг энэ файлд нөхөх.
 - K05/K06 (US-03): картын төлөв болон repo-ийн бодит кодын зөрүүг тодруулах.
+- Release plan (6.1): Sprint 2-ын ихэнх US хэрэгжээгүй, Sprint 4 нь capacity-аас 10 SP давсан → хуваарийг дахин хянах.
+- **Node хувилбар:** Docker image `node:26-alpine`, CI тест Node 20 → нийцүүлэх (Лаб 12-ын үед илэрсэн).
+- **Dummy hash-ийн cost:** `src/auth.js`-ийн `DUMMY_PASSWORD_HASH` cost 12. Бүртгэлийн bcrypt cost-той ижил байх ёстой (timing хамгаалалт).
+- npm audit: minimatch (Moderate), deepmerge (Low) нь dev хамааралд байгаа. Эрсдлийг хүлээн зөвшөөрсөн, Dependabot-оор хянана.
+- CI-ийн анхааруулга: `ubuntu-latest` Ubuntu 26 руу шилжиж байгаа.
