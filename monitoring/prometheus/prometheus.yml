@@ -1,0 +1,19 @@
+# Prometheus тохиргоо (Лаб 13)
+global:
+  scrape_interval: 5s          # 5 секунд тутам metrics цуглуулна (лабд real-time харахад тохиромжтой)
+  evaluation_interval: 5s      # alert rule-ийг 5 секунд тутам шалгана
+
+rule_files:
+  - /etc/prometheus/alerts.yml
+
+scrape_configs:
+  # CareerBridge API — Docker Compose сүлжээнд "api" нэрээр хандана
+  - job_name: careerbridge-api
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['api:3000']
+
+  # Prometheus өөрийгөө хянах
+  - job_name: prometheus
+    static_configs:
+      - targets: ['localhost:9090']

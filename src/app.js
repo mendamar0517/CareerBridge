@@ -3,12 +3,19 @@
 const os = require('os');
 const express = require('express');
 const { validateRegistration } = require('./registration');
+const { createMetrics } = require('./metrics');
 const { version } = require('../package.json');
 
 // db: createDb()-ийн буцаасан объект эсвэл null (DB тохируулаагүй)
 function createApp({ db = null } = {}) {
   const app = express();
   app.disable('x-powered-by');
+
+  // Лаб 13: хүсэлт бүрийг хэмжиж, /metrics-ээр Prometheus-т өгнө
+  const metrics = createMetrics();
+  app.use(metrics.middleware);
+  app.get('/metrics', metrics.handler);
+
   app.use(express.json({ limit: '100kb' }));
 
   // Docker HEALTHCHECK, CI-ийн smoke test, Render-ийн health check ашиглана

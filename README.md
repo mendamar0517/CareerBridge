@@ -114,6 +114,7 @@ Package нь **public** тул нэвтрэлтгүй pull хийнэ.
 | --- | --- | --- |
 | `GET` | `/health` | Төлөв шалгах (Docker HEALTHCHECK, k8s probe). `instance` = контейнер/Pod-ийн нэр |
 | `GET` | `/health/db` | PostgreSQL холболт: хүснэгт, view-ийн тоо (DB байхгүй бол 503) |
+| `GET` | `/metrics` | Prometheus metrics: хүсэлтийн тоо, хариу өгөх хугацаа, Node.js процесс (Лаб 13) |
 | `POST` | `/api/v1/registrations/validate` | US-01 бүртгэлийн өгөгдлийг шалгах: 200 эсвэл 400 + `errors` |
 
 ### Pipeline-ийн баталгаажуулалт (2026-10-23)
@@ -154,4 +155,8 @@ ESLint (security, sonarjs, n), `npm audit`, Dependabot, CI gate: [docs/lab11.md]
 ## Лаборатори 12 — AI ашиглан код бичих, review
 
 Prompt харьцуулалт, AI-ийн кодын review, ашиглалтын тэмдэглэл: [docs/lab12.md](docs/lab12.md).
+
+## Лаборатори 13 — Prometheus, Grafana
+
+`docker compose up -d --build` → Prometheus http://localhost:9090, Grafana http://localhost:3001. Дэлгэрэнгүй: [docs/lab13.md](docs/lab13.md).
 
