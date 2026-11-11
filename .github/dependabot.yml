@@ -33,6 +33,13 @@ updates:
       timezone: Asia/Ulaanbaatar
     open-pull-requests-limit: 5
     groups:
+      react:                       # react, react-dom-ийн хувилбар заавал ижил (peer) → нэг PR
+        patterns: [react, react-dom]
       web-tooling:
         dependency-type: development
+    ignore:
+      # Tailwind 4 нь тохиргоо, CSS-ийн бүтцийг өөрчилдөг (PostCSS plugin тусдаа package болсон).
+      # Шилжилтийг тусдаа ажлаар хийнэ; patch/minor шинэчлэл ирсээр байна.
+      - dependency-name: tailwindcss
+        update-types: [version-update:semver-major]
     labels: [dependencies, frontend]
