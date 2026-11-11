@@ -151,3 +151,7 @@ AAA бүтэцтэй unit тест, хилийн тохиолдол, `jest.fn()`
 
 ESLint (security, sonarjs, n), `npm audit`, Dependabot, CI gate: [docs/lab11.md](docs/lab11.md).
 
+## Лаборатори 12 — AI ашиглан код бичих, review
+
+Prompt харьцуулалт, AI-ийн кодын review, ашиглалтын тэмдэглэл: [docs/lab12.md](docs/lab12.md).
+
