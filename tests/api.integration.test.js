@@ -342,9 +342,9 @@ itDb('REST API integration (US-01 … US-15)', () => {
         { questionId: 999999, optionIds: [1] },
       ] });
       expect(res.status).toBe(200);
-      expect(res.body).toMatchObject({ earned: 3, max: 4, score: 75, passed: true, late: false });
+      expect(res.body).toMatchObject({ earned: 3, max: 3, score: 100, passed: true, late: false });
       expect((await api.post(`${base}/submit`).set(s).send({ answers: [] })).status).toBe(409);
-      expect((await api.get(base).set(s)).body).toMatchObject({ questions: [], attempt: { score: 75 } });
+      expect((await api.get(base).set(s)).body).toMatchObject({ questions: [], attempt: { score: 100 } });
 
       // Хугацаа хэтэрсэн оролдлого 0 оноо
       await api.get(`/api/v1/me/applications/${seeker2App}/assessment`).set(auth(seeker2.token));
@@ -366,7 +366,7 @@ itDb('REST API integration (US-01 … US-15)', () => {
       expect(res.status).toBe(200);
       expect(res.body.assessment.passScore).toBe(50);
       const [first, second] = res.body.applicants;
-      expect(first).toMatchObject({ fullName: 'Тест Горилогч', score: 75, passed: true, eligible: true });
+      expect(first).toMatchObject({ fullName: 'Тест Горилогч', score: 100, passed: true, eligible: true });
       expect(first.match.percent).toBe(100);
       expect(first.educations[0].school).toBe('ШУТИС');
       expect(first.skills).toHaveLength(3);
@@ -390,7 +390,7 @@ itDb('REST API integration (US-01 … US-15)', () => {
       const mine = (await api.get('/api/v1/me/applications').set(auth(seeker.token))).body.find((a) => a.id === applicationId);
       expect(mine.status).toBe('INTERVIEW');
       expect(mine.history.map((h) => h.newStatus)).toEqual(['SUBMITTED', 'REVIEWING', 'INTERVIEW']);
-      expect(mine.assessment).toMatchObject({ score: 75 });
+      expect(mine.assessment).toMatchObject({ score: 100 });
       expect(mine.job.title).toContain('Junior Backend');
 
       expect((await api.patch(p).set(e).send({ status: 'ACCEPTED' })).status).toBe(200);

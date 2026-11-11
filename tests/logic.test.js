@@ -39,7 +39,7 @@ describe('scoreAttempt (US-14)', () => {
   ];
   test('бүгд зөв (TEXT-ийг автоматаар үнэлэхгүй)', () => {
     const r = scoreAttempt(questions, [{ questionId: 1, optionIds: [12] }, { questionId: 2, optionIds: [22, 21, 21] }, { questionId: 3, text: 'x' }]);
-    expect(r).toMatchObject({ earned: 3, max: 5, percent: 60 });
+    expect(r).toMatchObject({ earned: 3, max: 3, percent: 100 });
     expect(r.perQuestion[2].awarded).toBeNull();
   });
   test('олон хариулттайд дутуу/илүү сонгосон бол 0, хариулаагүй бол 0', () => {
@@ -48,8 +48,9 @@ describe('scoreAttempt (US-14)', () => {
     expect(scoreAttempt(questions, [{ questionId: 1, optionIds: [11, 12] }]).earned).toBe(0);
     expect(scoreAttempt(questions, []).percent).toBe(0);
   });
-  test('асуултгүй бол 0%', () => {
+  test('асуултгүй эсвэл зөвхөн TEXT асуулттай бол 0%', () => {
     expect(scoreAttempt([], []).percent).toBe(0);
+    expect(scoreAttempt([questions[2]], [{ questionId: 3, text: 'x' }]).percent).toBe(0);
   });
 });
 

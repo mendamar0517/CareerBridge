@@ -104,7 +104,7 @@ function applicationsRouter({ db }) {
     const limitMs = (assessment.timeLimitMinutes ?? 0) * 60000;
     const late = limitMs > 0 && Date.now() > new Date(attempt.startedAt).getTime() + limitMs + GRACE_SECONDS * 1000;
     // Хугацаа хэтэрсэн бол хариултыг хүлээн авахгүй, 0 оноо
-    const result = late ? { percent: 0, earned: 0, max: questions.reduce((s, qu) => s + qu.points, 0), perQuestion: [] } : scoreAttempt(questions, answers);
+    const result = late ? { percent: 0, earned: 0, max: questions.filter((qu) => qu.type !== 'TEXT').reduce((s, qu) => s + qu.points, 0), perQuestion: [] } : scoreAttempt(questions, answers);
     const awarded = new Map(result.perQuestion.map((p) => [p.questionId, p.awarded]));
 
     await db.tx(async (t) => {
