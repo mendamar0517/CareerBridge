@@ -1,7 +1,7 @@
 # CareerBridge — төслийн мэдээллийн файл
 
 > F.CSA316 «Программ хангамж хөгжүүлэлтийн процесс» (багш Ж.Алимаа), ШУТИС-МХТС.
-> Сүүлд шинэчилсэн: 2026-11-11 (11-р долоо хоног, Лаб 13-ын дараа).
+> Сүүлд шинэчилсэн: 2026-11-11 (11-р долоо хоног, Лаб 14-ийн дараа).
 > Тэмдэглэгээ: **[мэдээлэл хэрэгтэй]** гэсэн хэсгийг өмнөх лабораторийн бодит өгөгдлөөр нөхөнө.
 > «Санал / төлөвлөгөө» гэж тэмдэглэсэн өгөгдөл нь бодит хэмжилт биш.
 
@@ -104,6 +104,7 @@ UI давхарга болон бизнесийн API endpoint-ууд (проф�
 | Лаб 11 (11-01, PR #34) | Статик шинжилгээ | ESLint 9 (recommended + security + sonarjs + n + jest): 14 → 0. ReDoS (имэйлийн regex, 80 KB оролтод 4.4 с → 0.7 мс). npm audit: 31 (Moderate 27, Low 4), бүгд dev, production 0. CI-д lint + audit gate, Dependabot |
 | Лаб 12 (11-11, PR #47) | AI ашиглан код бичих, review | `src/auth.js` `authenticate()` (US-01). AI-ийн анхны код `f0ce8eb`, review-ийн засвар `d05b4d1`. Ерөнхий prompt → Python (буруу), тодорхой prompt → шаардлагын 7 зүйл бүгд. Review: 4 асуудал ([High] fail-open `isActive` → `!== true`; [Medium] lint; [Low] давхардал, тестийн өгөгдөл). `auth.test.js` 46 тест |
 | Лаб 13 (11-11, PR #48) | Prometheus, Grafana | `src/metrics.js` (prom-client): `http_requests_total`, `http_request_duration_seconds`, Node.js metrics; `GET /metrics`. Compose-д Prometheus (9090), Grafana (3001), provisioning-оор data source + 8 panel-тай dashboard. Alert: `HighRequestRate` (> 5 req/s), `HighLatencyP95`, `ApiDown`. Ачааллын үед: 8.35 req/s, 494 хүсэлт, p95 4.76 мс, `HighRequestRate` firing. CI `monitoring` job. CI-ийн Node 20 → 26 |
+| Лаб 14 (11-11) | DORA, Retrospective | Бодит өгөгдөл (deploy = main дээр GHCR руу push), 2026-10-23 – 11-11, 19.37 хоног. DF: 22 deploy, 1.14/өдөр, 4 өдөр → **High**. Lead time median 19 мин (багийн 8 мин, Dependabot 28 цаг) → **Elite**. CFR 1/22 = 4.5% (PR #29, arm64) → **Elite**. Time to restore 11 мин 20 с (PR #30) → **Elite**. Retrospective-ийн төсөл, 5 action item (багаар батлах) |
 
 ## 6. Хуваарь
 
@@ -259,5 +260,6 @@ Sprint бүрийн SP (Лаб 03-ын үнэлгээгээр):
 - K05/K06 (US-03): картын төлөв болон repo-ийн бодит кодын зөрүүг тодруулах.
 - Release plan (6.1): Sprint 2-ын ихэнх US хэрэгжээгүй, Sprint 4 нь capacity-аас 10 SP давсан → хуваарийг дахин хянах.
 - **Dummy hash-ийн cost:** `src/auth.js`-ийн `DUMMY_PASSWORD_HASH` cost 12. Бүртгэлийн bcrypt cost-той ижил байх ёстой (timing хамгаалалт).
+- **Retrospective-ийн action item (санал, багаар батлах):** (1) Release plan / MVP хүрээг дахин тогтоох (PO, 11-13); (2) branch protection, 1 approval, PR template-д AI ашигласан эсэх (SM, 11-12); (3) гишүүн бүр Sprint бүрт ≥ 1 US-ийн PR; (4) Render-т байршуулж DORA-г production-оор дахин хэмжих (11-20); (5) Velocity/Burndown хөтлөх, Dependabot-ийн PR-ыг 24 цагт шийдэх.
 - npm audit: minimatch (Moderate), deepmerge (Low) нь dev хамааралд байгаа. Эрсдлийг хүлээн зөвшөөрсөн, Dependabot-оор хянана.
 - CI-ийн анхааруулга: `ubuntu-latest` Ubuntu 26 руу шилжиж байгаа.
