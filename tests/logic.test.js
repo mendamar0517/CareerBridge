@@ -139,6 +139,13 @@ describe('App: DB-гүй болон SPA түгээлт', () => {
   });
   test('staticDir өгвөл SPA-г түгээнэ, API/health-д нөлөөлөхгүй', async () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cb-web-'));
+    const indexPath = path.join(dir, 'index.html');
+
+    if (!indexPath.startsWith(dir + path.sep)) {
+      throw new Error('Invalid file path');
+    }
+
+    // eslint-disable-next-line security/detect-non-literal-fs-filename -- dir is a newly created temporary directory.
     fs.writeFileSync(path.join(dir, 'index.html'), '<!doctype html><title>CareerBridge</title>');
     const app = createApp({ staticDir: dir });
     const page = await request(app).get('/jobs/12');
